@@ -1,0 +1,7 @@
+.vscode/
+
+*.out
+*.txt
+*.filter
+tmp*/
+*~
