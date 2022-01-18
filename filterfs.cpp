@@ -1,10 +1,3 @@
-/*
-  FUSE: Filesystem in Userspace
-  Copyright (C) 2001-2007  Miklos Szeredi <miklos@szeredi.hu>
-  Copyright (C) 2011       Sebastian Pipping <sebastian@pipping.org>
-  This program can be distributed under the terms of the GNU GPLv2.
-  See the file COPYING.
-*/
 #define FUSE_USE_VERSION 31
 #include <dirent.h>
 #include <errno.h>
@@ -21,7 +14,6 @@
 #include "filter.hpp"
 #include <filesystem>
 #include <optional>
-// #include "passthrough_helpers.h"
 
 void fullpath2(char *fpath, const char *root, const char *path) {
     char *fp = fpath;
@@ -40,22 +32,6 @@ void fullpath2(char *fpath, const char *root, const char *path) {
     *(fp++) = '\0';
 }
 
-// std::optional<std::string> fullpath(const std::string &root, const std::string &path) {
-//     std::stringstream ss;
-//     if (root[root.length() - 1] == '/') {
-//         ss << root.substr(0, root.length() - 1);
-//     } else {
-//         ss << root;
-//     }
-//     ss << '/';
-//     if (path[0] == '/') {
-//         ss << path.substr(1);
-//     } else {
-//         ss << path;
-//     }
-//     return ss.str();
-// }
-
 static enum fuse_fill_dir_flags fill_dir_plus = (enum fuse_fill_dir_flags)0;
 static path_filter filter;
 static char source_root[PATH_MAX];
@@ -64,13 +40,6 @@ static void *xmp_init(struct fuse_conn_info *conn,
                       struct fuse_config *cfg) {
     (void)conn;
     cfg->use_ino = 1;
-    /* Pick up changes from lower filesystem right away. This is
-           also necessary for better hardlink support. When the kernel
-           calls the unlink() handler, it does not know the inode of
-           the to-be-removed entry and can therefore not invalidate
-           the cache of the associated inode - resulting in an
-           incorrect st_nlink value being reported for any remaining
-           hardlinks to this inode. */
     cfg->entry_timeout = 0;
     cfg->attr_timeout = 0;
     cfg->negative_timeout = 0;
@@ -155,13 +124,6 @@ static int xmp_read(const char *path, char *buf, size_t size, off_t offset,
         close(fd);
     return res;
 }
-// static int xmp_statfs(const char *path, struct statvfs *stbuf) {
-//     int res;
-//     res = statvfs(path, stbuf);
-//     if (res == -1)
-//         return -errno;
-//     return 0;
-// }
 static int xmp_release(const char *path, struct fuse_file_info *fi) {
     close(fi->fh);
     return 0;
@@ -267,29 +229,6 @@ static const struct fuse_operations xmp_oper = {
     .lseek = xmp_lseek,
 };
 int main(int argc, char *argv[]) {
-
-    // {
-    //     char fpath[PATH_MAX];
-    //     fullpath2(fpath, "/a/", "/b/");
-    //     printf("%s\n", fpath);
-    // }
-    // {
-    //     char fpath[PATH_MAX];
-    //     fullpath2(fpath, "/a", "b/");
-    //     printf("%s\n", fpath);
-    // }
-    // {
-    //     char fpath[PATH_MAX];
-    //     fullpath2(fpath, "/a/", "b/");
-    //     printf("%s\n", fpath);
-    // }
-    // {
-    //     char fpath[PATH_MAX];
-    //     fullpath2(fpath, "/a", "/b/");
-    //     printf("%s\n", fpath);
-    // }
-    // exit(0);
-
     enum { MAX_ARGS = 10 };
     int new_argc = 0;
     char *new_argv[MAX_ARGS];
