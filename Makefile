@@ -1,7 +1,20 @@
+PREFIX:=/usr/local/bin/
+TARGET:=filterfs
+CXX:=g++
+CXXFLAGS:=-std=c++17 -O2
+
 all:
-	g++ -std=c++17 filterfs.cpp -lfuse3 -lpthread -o filterfs
+	$(CXX) $(CXXFLAGS) filterfs.cpp -lfuse3 -lpthread -o $(TARGET)
 
 segment:
-	g++ test_segment.cpp -o segment.out
+	$(CXX) $(CXXFLAGS) test_segment.cpp -o segment.out
+
 rule:
-	g++ test_rule.cpp -o rule.out
+	$(CXX) $(CXXFLAGS) test_rule.cpp -o rule.out
+
+test: segment rule
+	./segment.out
+	./rule.out
+
+install:
+	cp -i $(TARGET) $(PREFIX)/$(TARGET)
