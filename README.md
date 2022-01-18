@@ -12,3 +12,33 @@ filtered overlay filesystem using rsync like filter file.
 ```sh
 make
 ```
+
+## Usage
+
+```sh
+# create mount point
+mkdir mountpoint/
+
+# mount
+./filterfs --filter backup.filter --source / mountpoint/
+
+# unmount
+fusermount -u mountpoint/
+```
+
+`backup.filter` should be like this.
+
+```
+- .git
+- node_modules
+- .ssh
+
++ /home/
++ /home/**
++ /etc/
++ /etc/**
++ /root/
++ /root/**
+
+- /**
+```
