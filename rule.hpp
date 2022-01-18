@@ -145,10 +145,9 @@ class rule {
                 }
 
                 last_pos = pos + 1;
-
-                if (*c == '\0')
-                    break;
             }
+            if (*c == '\0')
+                break;
         }
 
         return false;
