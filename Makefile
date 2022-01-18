@@ -4,13 +4,13 @@ CXX:=g++
 CXXFLAGS:=-std=c++17 -O2
 
 all:
-	$(CXX) $(CXXFLAGS) filterfs.cpp -lfuse3 -lpthread -o $(TARGET)
+	$(CXX) $(CXXFLAGS) src/filterfs.cpp -lfuse3 -lpthread -o $(TARGET)
 
 segment:
-	$(CXX) $(CXXFLAGS) test_segment.cpp -o segment.out
+	$(CXX) $(CXXFLAGS) src/test_segment.cpp -o segment.out
 
 rule:
-	$(CXX) $(CXXFLAGS) test_rule.cpp -o rule.out
+	$(CXX) $(CXXFLAGS) src/test_rule.cpp -o rule.out
 
 test: segment rule
 	./segment.out
