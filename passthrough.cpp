@@ -162,6 +162,10 @@ static int xmp_read(const char *path, char *buf, size_t size, off_t offset,
 //         return -errno;
 //     return 0;
 // }
+static int xmp_release(const char *path, struct fuse_file_info *fi) {
+    close(fi->fh);
+    return 0;
+}
 #ifdef HAVE_SETXATTR
 /* xattr operations are optional and can safely be left unimplemented */
 static int xmp_setxattr(const char *path, const char *name, const char *value,
@@ -225,10 +229,10 @@ static const struct fuse_operations xmp_oper = {
     // .truncate = xmp_truncate,
     .open = xmp_open,
     .read = xmp_read,
-// .write = xmp_write,
-// .statfs = xmp_statfs,
-// flush
-// .release = xmp_release,
+    // .write = xmp_write,
+    // .statfs = xmp_statfs,
+    // flush
+    .release = xmp_release,
 // .fsync = xmp_fsync,
 #ifdef HAVE_SETXATTR
     .setxattr = xmp_setxattr,
