@@ -1,10 +1,8 @@
 TEST_DIR:=/tmp/fuser-filter
 
 all:
-	g++ -std=c++17 passthrough.cpp -lfuse3 -lpthread -o passthrough
+	g++ -std=c++17 filterfs.cpp -lfuse3 -lpthread -o filterfs
 
-filter:
-	g++ filter.cpp -o filter.out
 segment:
 	g++ test_segment.cpp -o segment.out
 rule:
